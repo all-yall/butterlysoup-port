@@ -71,9 +71,6 @@ fi
 mpv "$GAMEDIR/cover.png"
 
 pm_platform_helper "$GAMEDIR/renpy/lib/py3-linux-aarch64/startRENPY"
-$GPTOKEYB "startRENPY" -c "$GAMEDIR/butterflysoup.gptk" &
-
+# native controller support, no need for gptokeyb
 bash "./$PORTEXEC"
-
 pm_finish
-$ESUDO kill -9 $(pidof gptokeyb)
