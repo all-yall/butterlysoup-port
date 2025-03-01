@@ -1,27 +1,23 @@
+[controls]
+
 back = esc
-start = enter
+start = esc
+
 a = enter
-b = \"
-x = h
-y = ctrl
+b = esc
+x = mouse_middle
+y = h
 
-l1 = tab
-l2 = \"
-l3 = \"
+l1 = pageup
+l2 = pageup
 
-r1 = tab
-r2 = \"
-r3 = \"
+r1 = pagedown
+r2 = pagedown
 
 up = up
 down = down 
 left = left
 right = right
-
-right_analog_up = \"
-right_analog_down = \" 
-right_analog_left = \"
-right_analog_right = \"
 
 left_analog_up = up
 left_analog_down = down 

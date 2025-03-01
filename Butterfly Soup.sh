@@ -78,6 +78,7 @@ fi
 
 pm_begin_splash
 pm_platform_helper "$GAMEDIR/renpy/lib/py3-linux-aarch64/startRENPY"
-$GPTOKEYB "startRENPY" -c "butterflysoup.gptk"  &
+$GPTOKEYB2 "startRENPY" -c "butterflysoup.gptk"  &
 bash "./$PORTEXEC"
+pm_end_splash
 pm_finish
