@@ -1,5 +1,5 @@
 #!/bin/bash
-# PORTMASTER: kindredspiritsontheroof.zip, Kindred Spirits on the Roof.sh
+# PORTMASTER: butterflysoup.zip, Butterfly Soup.sh
 
 # Prelude
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
@@ -15,6 +15,8 @@ else
 fi
 
 source $controlfolder/control.txt
+[ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
+get_controls
 
 # Variables 
 PORTEXEC="renpy/startRENPY"
@@ -23,11 +25,6 @@ RUNTIME="renpy_8.1.3"
 RENPYDIR="$GAMEDIR/renpy/"
 GAMEFILES="$GAMEDIR/gamefiles/"
 RENPY_RUNTIME="$controlfolder/libs/${RUNTIME}.squashfs"
-
-export SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig"
-
-[ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
-get_controls
 
 cd "$GAMEDIR"
 
@@ -47,11 +44,25 @@ fi
 
 $ESUDO mkdir -p "$RENPYDIR"
 
+# Mounting Renpy and gamefiles
 $ESUDO umount "$RENPYDIR/game" || true
 $ESUDO umount "$RENPYDIR" || true
-$ESUDO mount "$RENPY_RUNTIME" "$RENPYDIR"
+$ESUDO mount  "$RENPY_RUNTIME" "$RENPYDIR"
 sleep 2
 $ESUDO mount --bind "$GAMEFILES" "$RENPYDIR/game"
+
+# Apply Patches
+if [ ! -e "$GAMEDIR/patched" ]; then
+  cp "$GAMEDIR/patches/overrides.rpy" "$GAMEFILES/"
+  touch "$GAMEDIR/patched"
+fi
+
+# Exports
+export SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig"
+export PYTHONHOME="$GAMEDIR/renpy"
+export PYTHONPATH="$GAMEDIR/renpy/lib/python3.9"
+export PM_SPLASH_THEME="$GAMEDIR/splash_theme.ini"
+export SPLASH_IMAGE="$GAMEDIR/cover.png"
 
 # If using gl4es
 if [ -f "${controlfolder}/libgl_${CFW_NAME}.txt" ]; then 
@@ -65,12 +76,8 @@ if [[ "$LIBGL_FB" != "" ]]; then
   export SDL_VIDEO_EGL_DRIVER="$GAMEDIR/gl4es.$DEVICE_ARCH/libEGL.so.1"
 fi
 
-
-# not a required command, just shows a splash while the
-# game loads
-mpv "$GAMEDIR/cover.png"
-
+pm_begin_splash
 pm_platform_helper "$GAMEDIR/renpy/lib/py3-linux-aarch64/startRENPY"
-# native controller support, no need for gptokeyb
+$GPTOKEYB "startRENPY" -c "butterflysoup.gptk"  &
 bash "./$PORTEXEC"
 pm_finish
