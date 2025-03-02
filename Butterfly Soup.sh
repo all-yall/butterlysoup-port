@@ -61,8 +61,6 @@ fi
 export SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig"
 export PYTHONHOME="$GAMEDIR/renpy"
 export PYTHONPATH="$GAMEDIR/renpy/lib/python3.9"
-export PM_SPLASH_THEME="$GAMEDIR/splash_theme.ini"
-export SPLASH_IMAGE="$GAMEDIR/cover.png"
 
 # If using gl4es
 if [ -f "${controlfolder}/libgl_${CFW_NAME}.txt" ]; then 
@@ -76,9 +74,7 @@ if [[ "$LIBGL_FB" != "" ]]; then
   export SDL_VIDEO_EGL_DRIVER="$GAMEDIR/gl4es.$DEVICE_ARCH/libEGL.so.1"
 fi
 
-pm_begin_splash
 pm_platform_helper "$GAMEDIR/renpy/lib/py3-linux-aarch64/startRENPY"
 $GPTOKEYB2 "startRENPY" -c "butterflysoup.gptk"  &
 bash "./$PORTEXEC"
-pm_end_splash
 pm_finish
